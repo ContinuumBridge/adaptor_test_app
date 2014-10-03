@@ -1,4 +1,4 @@
-adaptor_test_app
-================
+demo_switch_app
+===============
 
-An app that is purely used to test adaptors. Please extend as more adaptors become available.
+App to demonstrate various ways of turning a switch on and off.
