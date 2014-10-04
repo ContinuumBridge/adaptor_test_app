@@ -60,8 +60,7 @@ class App(CbApp):
 
     def onAdaptorData(self, message):
         #logging.debug("%s %s message: %s", ModuleName, self.id, str(message))
-        logging.info("%s %s characteristic: %s", ModuleName, self.id, str(message["characteristic"]))
-        logging.info("%s %s data: %s", ModuleName, self.id, str(message["data"]))
+        logging.info("%s %s %s: %s", ModuleName, self.id, str(message["characteristic"]), str(message["data"]))
 
     def onConfigureMessage(self, config):
         #logging.debug("%s onConfigureMessage, config: %s", ModuleName, config)
