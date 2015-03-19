@@ -1,8 +1,9 @@
 {
     "exe": "adaptor_test_app.py", 
     "name": "Adaptor Test App", 
-    "url": "https://github.com/ContinuumBridge/adaptor_test_app/archive/v0.1.1.tar.gz", 
-    "version": "0.1.1", 
+    "url": "https://github.com/ContinuumBridge/adaptor_test_app/archive/v1.0.0.tar.gz", 
+    "app_resource": "/api/bridge/v1/app/11", 
+    "version": "1.0.0", 
     "provider": "ContinuumBridge", 
     "description": "App for testing adaptors."
 }

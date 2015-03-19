@@ -21,7 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-ModuleName = "adaptor_test_app" 
 
 import sys
 import os.path
@@ -35,6 +34,8 @@ class App(CbApp):
         logging.basicConfig(filename=CB_LOGFILE,level=CB_LOGGING_LEVEL,format='%(asctime)s %(message)s')
         self.appClass = "control"
         self.state = "stopped"
+        self.devices = []
+        self.idToName = {} 
         # Super-class init must be called
         CbApp.__init__(self, argv)
 
@@ -46,24 +47,30 @@ class App(CbApp):
         self.sendManagerMessage(msg)
 
     def onAdaptorService(self, message):
-        #logging.debug("%s onadaptorService, message: %s", ModuleName, message)
+        #self.cbLog("debug", "onAdaptorService, message: " + str(message))
         s = []
         for p in message["service"]:
-            logging.info("%s %s characteristic: %s", ModuleName, self.id, str(p["characteristic"]))
+            self.cbLog("info", "characteristic: " + str(p["characteristic"]))
             s.append({"characteristic": p["characteristic"], "interval": 0})
         req = {"id": self.id,
                "request": "service",
                "service": s,
               }
         self.sendMessage(req, message["id"])
-        logging.debug("%s onadaptorservice, req: %s", ModuleName, req)
 
     def onAdaptorData(self, message):
-        #logging.debug("%s %s message: %s", ModuleName, self.id, str(message))
-        logging.info("%s %s %s: %s", ModuleName, self.id, str(message["characteristic"]), str(message["data"]))
+        self.cbLog("info", "Device: " + self.idToName[message["id"]] + " " + str(message["characteristic"]) + ": " + str(message["data"]))
 
-    def onConfigureMessage(self, config):
-        #logging.debug("%s onConfigureMessage, config: %s", ModuleName, config)
+    def onConfigureMessage(self, managerConfig):
+        for adaptor in managerConfig["adaptors"]:
+            adtID = adaptor["id"]
+            if adtID not in self.devices:
+                # Because managerConfigure may be re-called if devices are added
+                name = adaptor["name"]
+                friendly_name = adaptor["friendly_name"]
+                self.cbLog("debug", "managerConfigure app. Adaptor id: " +  adtID + " name: " + name + " friendly_name: " + friendly_name)
+                self.idToName[adtID] = friendly_name.replace(" ", "_")
+                self.devices.append(adtID)
         self.setState("starting")
 
 if __name__ == '__main__':
