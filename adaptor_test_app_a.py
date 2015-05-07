@@ -24,6 +24,7 @@ SOFTWARE.
 
 import sys
 import os.path
+import json
 import time
 import logging
 from cbcommslib import CbApp
@@ -47,7 +48,7 @@ class App(CbApp):
         self.sendManagerMessage(msg)
 
     def onAdaptorService(self, message):
-        #self.cbLog("debug", "onAdaptorService, message: " + str(message))
+        #self.cbLog("debug", "onAdaptorService, message: " + json.dumps(message, indent=4))
         s = []
         for p in message["service"]:
             self.cbLog("info", "characteristic: " + str(p["characteristic"]))
